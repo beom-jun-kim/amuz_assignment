@@ -45,10 +45,8 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
     }
 
     if (todo) {
-      // 기존 TODO 수정
       updateTodo(todo.id, formData)
     } else {
-      // 새 TODO 추가
       addTodo(formData)
     }
 
@@ -56,7 +54,6 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
   }
 
   return (
-    // 모달 배경
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between">
@@ -68,7 +65,6 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
 
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* 제목 입력 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">제목 *</label>
               <Input
@@ -81,7 +77,6 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
               />
             </div>
 
-            {/* 설명 입력 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">설명</label>
               <Textarea
@@ -92,7 +87,6 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
               />
             </div>
 
-            {/* 우선순위 선택 */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">우선순위</label>
               <Select value={formData.priority} onValueChange={(value) => handleInputChange("priority", value)}>
@@ -107,7 +101,6 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
               </Select>
             </div>
 
-            {/* 상태 선택 (수정 시에만 표시) */}
             {todo && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">상태</label>
@@ -124,7 +117,6 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
               </div>
             )}
 
-            {/* 버튼들 */}
             <div className="flex gap-3 pt-4">
               <Button type="button" variant="outline" onClick={onClose} className="flex-1">
                 취소

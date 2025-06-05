@@ -21,7 +21,6 @@ export default function TodoColumn({
 }: TodoColumnProps) {
   return (
     <div className={`rounded-lg border-2 ${color} min-h-96`}>
-      {/* 컬럼 헤더 */}
       <div className={`${headerColor} px-4 py-3 rounded-t-lg`}>
         <h2 className="font-semibold text-lg flex items-center justify-between">
           {title}

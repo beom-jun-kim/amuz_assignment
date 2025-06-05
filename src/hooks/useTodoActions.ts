@@ -46,7 +46,6 @@ export const useTodoActions = () => {
   ) => {
     setTodos((prev) => {
       const statusTodos = prev.filter((todo) => todo.status === status);
-      const otherTodos = prev.filter((todo) => todo.status !== status);
 
       const [movedTodo] = statusTodos.splice(sourceIndex, 1);
       statusTodos.splice(destinationIndex, 0, movedTodo);

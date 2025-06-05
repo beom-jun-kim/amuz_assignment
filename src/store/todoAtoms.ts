@@ -10,7 +10,6 @@ const loadTodosFromStorage = (): Todo[] => {
     if (!stored) return [];
 
     const parsed = JSON.parse(stored);
-    // Date 객체로 변환
     return parsed.map((todo: any) => ({
       ...todo,
       createdAt: new Date(todo.createdAt),
@@ -28,7 +27,6 @@ export const todosState = atom<Todo[]>({
   default: loadTodosFromStorage(),
   effects: [
     ({ onSet }) => {
-      // 상태가 변경될 때마다 로컬 스토리지에 저장
       onSet((newTodos) => {
         if (typeof window !== "undefined") {
           try {

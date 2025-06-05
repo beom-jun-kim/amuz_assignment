@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 커스텀 폰트 임포트 */
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); */
-
 /* 스크롤바 스타일링 */
 ::-webkit-scrollbar {
   width: 8px;
