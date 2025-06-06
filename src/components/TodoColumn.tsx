@@ -21,8 +21,8 @@ function TodoColumn({
   headerColor,
 }: TodoColumnProps) {
   return (
-    <div className={`rounded-lg border-2 ${color} min-h-96`}>
-      <div className={`${headerColor} px-4 py-3 rounded-t-lg`}>
+    <div className={`rounded-lg border-2 ${color} h-[500px] md:h-[600px] lg:h-[650px] xl:h-[700px] flex flex-col`}>
+      <div className={`${headerColor} px-4 py-3 rounded-t-lg flex-shrink-0`}>
         <h2 className="font-semibold text-lg flex items-center justify-between">
           {title}
           <span className="bg-white bg-opacity-70 text-sm px-2 py-1 rounded-full">
@@ -37,7 +37,7 @@ function TodoColumn({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`p-4 min-h-80 transition-colors duration-200 ${
+            className={`p-4 flex-1 overflow-y-auto transition-colors duration-200 ${
               snapshot.isDraggingOver ? "bg-blue-50 bg-opacity-50" : ""
             }`}
           >
