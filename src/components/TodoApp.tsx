@@ -50,15 +50,9 @@ export default function TodoApp() {
 
   // 전체 데이터 삭제 함수
   const handleClearAllData = useCallback(() => {
-    if (
-      confirm(
-        "정말로 모든 할일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
-      )
-    ) {
-      if (confirm("마지막 확인: 모든 데이터가 영구적으로 삭제됩니다.")) {
-        clearAllTodos();
-        alert("모든 데이터가 삭제되었습니다.");
-      }
+    if (confirm("모든 할일을 삭제하시겠습니까?")) {
+      clearAllTodos();
+      alert("삭제되었습니다.");
     }
   }, [clearAllTodos]);
 
