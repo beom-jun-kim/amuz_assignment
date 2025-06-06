@@ -1,4 +1,5 @@
 "use client";
+import { memo } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import type { Todo } from "../types/Todo";
 import TodoItem from "./TodoItem";
@@ -12,7 +13,7 @@ interface TodoColumnProps {
 }
 
 // TODO 컬럼 컴포넌트 - 각 상태별 TODO들을 표시
-export default function TodoColumn({
+function TodoColumn({
   title,
   status,
   todos,
@@ -56,3 +57,5 @@ export default function TodoColumn({
     </div>
   );
 }
+
+export default memo(TodoColumn);

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Todo } from "../types/Todo"
 import { useTodoActions } from "../hooks/useTodoActions"
 import { Button } from "@/components/ui/button"
@@ -30,12 +30,12 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
   })
 
   // 입력 필드 변경 핸들러
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = useCallback((field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  }, [])
 
   // 폼 제출 핸들러
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault()
 
     // 제목이 비어있으면 제출하지 않음
@@ -51,7 +51,7 @@ export default function TodoForm({ todo, onClose, onSubmit }: TodoFormProps) {
     }
 
     onSubmit()
-  }
+  }, [formData, todo, addTodo, updateTodo, onSubmit])
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">

@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import { useCallback, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import {
   todosState,
@@ -20,24 +21,33 @@ export default function SearchBar() {
   const { updateSearchQuery, updateFilter } = useTodoActions();
 
   // 검색어 변경 핸들러
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     updateSearchQuery(e.target.value);
-  };
+  }, [updateSearchQuery]);
 
   // 필터 변경 핸들러
-  const handleFilterChange = (
+  const handleFilterChange = useCallback((
     newFilter: "all" | "todo" | "inProgress" | "completed"
   ) => {
     updateFilter(newFilter);
-  };
+  }, [updateFilter]);
 
-  const completedTodos = todos.filter(
-    (todo) => todo.status === "completed"
-  ).length;
-  const inProgressTodos = todos.filter(
-    (todo) => todo.status === "inProgress"
-  ).length;
-  const todoTodos = todos.filter((todo) => todo.status === "todo").length;
+  // 상태별 할일 개수 계산 - 메모이제이션
+  const todoStats = useMemo(() => {
+    const completedTodos = todos.filter(
+      (todo) => todo.status === "completed"
+    ).length;
+    const inProgressTodos = todos.filter(
+      (todo) => todo.status === "inProgress"
+    ).length;
+    const todoTodos = todos.filter((todo) => todo.status === "todo").length;
+
+    return {
+      completedTodos,
+      inProgressTodos,
+      todoTodos
+    };
+  }, [todos]);
 
   return (
     <div className="space-y-4">
@@ -72,7 +82,7 @@ export default function SearchBar() {
             onClick={() => handleFilterChange("todo")}
             className="text-red-600 border-red-200 hover:bg-red-50"
           >
-            해야 할 일 ({todoTodos})
+            해야 할 일 ({todoStats.todoTodos})
           </Button>
           <Button
             variant={filter === "inProgress" ? "default" : "outline"}
@@ -80,7 +90,7 @@ export default function SearchBar() {
             onClick={() => handleFilterChange("inProgress")}
             className="text-yellow-600 border-yellow-200 hover:bg-yellow-50"
           >
-            진행 중 ({inProgressTodos})
+            진행 중 ({todoStats.inProgressTodos})
           </Button>
           <Button
             variant={filter === "completed" ? "default" : "outline"}
@@ -88,7 +98,7 @@ export default function SearchBar() {
             onClick={() => handleFilterChange("completed")}
             className="text-green-600 border-green-200 hover:bg-green-50"
           >
-            완료됨 ({completedTodos})
+            완료됨 ({todoStats.completedTodos})
           </Button>
         </div>
       </div>

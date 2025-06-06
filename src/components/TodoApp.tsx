@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRecoilValue } from "recoil";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 import { todosByStatusState } from "../store/todoAtoms";
@@ -18,7 +18,7 @@ export default function TodoApp() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   // 드래그 앤 드롭 완료 시 호출되는 함수
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = useCallback((result: DropResult) => {
     const { destination, source, draggableId } = result;
 
     // 드롭 위치가 없으면 아무것도 하지 않음
@@ -46,10 +46,10 @@ export default function TodoApp() {
         source.droppableId as "todo" | "inProgress" | "completed"
       );
     }
-  };
+  }, [moveTodo, reorderTodos]);
 
   // 전체 데이터 삭제 함수
-  const handleClearAllData = () => {
+  const handleClearAllData = useCallback(() => {
     if (
       confirm(
         "정말로 모든 할일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
@@ -60,7 +60,7 @@ export default function TodoApp() {
         alert("모든 데이터가 삭제되었습니다.");
       }
     }
-  };
+  }, [clearAllTodos]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">

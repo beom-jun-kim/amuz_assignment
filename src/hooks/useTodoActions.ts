@@ -1,4 +1,5 @@
 import { useSetRecoilState } from "recoil";
+import { useCallback } from "react";
 import { todosState, searchQueryState, filterState } from "../store/todoAtoms";
 import { Todo } from "../types/Todo";
 
@@ -7,7 +8,7 @@ export const useTodoActions = () => {
   const setSearchQuery = useSetRecoilState(searchQueryState);
   const setFilter = useSetRecoilState(filterState);
 
-  const addTodo = (todoData: Omit<Todo, "id" | "createdAt" | "updatedAt">) => {
+  const addTodo = useCallback((todoData: Omit<Todo, "id" | "createdAt" | "updatedAt">) => {
     const newTodo: Todo = {
       ...todoData,
       id: Date.now().toString(),
@@ -15,21 +16,21 @@ export const useTodoActions = () => {
       updatedAt: new Date(),
     };
     setTodos((prev) => [...prev, newTodo]);
-  };
+  }, [setTodos]);
 
-  const updateTodo = (id: string, updates: Partial<Todo>) => {
+  const updateTodo = useCallback((id: string, updates: Partial<Todo>) => {
     setTodos((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, ...updates, updatedAt: new Date() } : todo
       )
     );
-  };
+  }, [setTodos]);
 
-  const deleteTodo = (id: string) => {
+  const deleteTodo = useCallback((id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
+  }, [setTodos]);
 
-  const moveTodo = (todoId: string, newStatus: Todo["status"]) => {
+  const moveTodo = useCallback((todoId: string, newStatus: Todo["status"]) => {
     setTodos((prev) =>
       prev.map((todo) =>
         todo.id === todoId
@@ -37,52 +38,56 @@ export const useTodoActions = () => {
           : todo
       )
     );
-  };
+  }, [setTodos]);
 
-  const reorderTodos = (
-    sourceIndex: number,
-    destinationIndex: number,
-    status: Todo["status"]
-  ) => {
-    setTodos((prev) => {
-      const statusTodos = prev.filter((todo) => todo.status === status);
+  const reorderTodos = useCallback(
+    (
+      sourceIndex: number,
+      destinationIndex: number,
+      status: Todo["status"]
+    ) => {
+      setTodos((prev) => {
+        const statusTodos = prev.filter((todo) => todo.status === status);
 
-      const [movedTodo] = statusTodos.splice(sourceIndex, 1);
-      statusTodos.splice(destinationIndex, 0, movedTodo);
+        const [movedTodo] = statusTodos.splice(sourceIndex, 1);
+        statusTodos.splice(destinationIndex, 0, movedTodo);
 
-      const todoItems = prev.filter((todo) => todo.status === "todo");
-      const inProgressItems = prev.filter(
-        (todo) => todo.status === "inProgress"
-      );
-      const completedItems = prev.filter((todo) => todo.status === "completed");
+        const todoItems = prev.filter((todo) => todo.status === "todo");
+        const inProgressItems = prev.filter(
+          (todo) => todo.status === "inProgress"
+        );
+        const completedItems = prev.filter((todo) => todo.status === "completed");
 
-      if (status === "todo") {
-        return [...statusTodos, ...inProgressItems, ...completedItems];
-      } else if (status === "inProgress") {
-        return [...todoItems, ...statusTodos, ...completedItems];
-      } else {
-        return [...todoItems, ...inProgressItems, ...statusTodos];
-      }
-    });
-  };
+        if (status === "todo") {
+          return [...statusTodos, ...inProgressItems, ...completedItems];
+        } else if (status === "inProgress") {
+          return [...todoItems, ...statusTodos, ...completedItems];
+        } else {
+          return [...todoItems, ...inProgressItems, ...statusTodos];
+        }
+      });
+    },
+    [setTodos]
+  );
 
-  const clearAllTodos = () => {
+  const clearAllTodos = useCallback(() => {
     setTodos([]);
-  };
+  }, [setTodos]);
 
-  const importTodos = (newTodos: Todo[]) => {
+  const importTodos = useCallback((newTodos: Todo[]) => {
     setTodos((prev) => [...prev, ...newTodos]);
-  };
+  }, [setTodos]);
 
-  const updateSearchQuery = (query: string) => {
+  const updateSearchQuery = useCallback((query: string) => {
     setSearchQuery(query);
-  };
+  }, [setSearchQuery]);
 
-  const updateFilter = (
-    filter: "all" | "todo" | "inProgress" | "completed"
-  ) => {
-    setFilter(filter);
-  };
+  const updateFilter = useCallback(
+    (filter: "all" | "todo" | "inProgress" | "completed") => {
+      setFilter(filter);
+    },
+    [setFilter]
+  );
 
   return {
     addTodo,

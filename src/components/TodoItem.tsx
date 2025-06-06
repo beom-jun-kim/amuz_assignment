@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Todo } from "../types/Todo";
 import { useTodoActions } from "../hooks/useTodoActions";
@@ -20,11 +20,11 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   // TODO 삭제 핸들러
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     if (window.confirm("정말로 이 할일을 삭제하시겠습니까?")) {
       deleteTodo(todo.id);
     }
-  };
+  }, [deleteTodo, todo.id]);
 
   // 우선순위에 따른 색상 및 아이콘 설정
   const getPriorityConfig = (priority: Todo["priority"]) => {
@@ -50,7 +50,7 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
     }
   };
 
-  const priorityConfig = getPriorityConfig(todo.priority);
+  const priorityConfig = useMemo(() => getPriorityConfig(todo.priority), [todo.priority]);
   const PriorityIcon = priorityConfig.icon;
 
   return (
